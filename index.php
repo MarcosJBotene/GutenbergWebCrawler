@@ -28,7 +28,6 @@ libxml_clear_errors();
 
 // Captura das Tags </p>
 $tagsP = $dom->getElementsByTagName('div');
-
 $arrayP = [];
 
 foreach ($tagsP as $div) {
@@ -49,3 +48,26 @@ foreach ($tagsP as $div) {
         break;
     }
 }
+
+$tagsA = $dom->getElementsByTagName('div');
+$arrayA = [];
+
+foreach ($tagsA as $div) {
+    $class = $div->getAttribute('class');
+    if ($class == 'page_content') {
+        $divsInternas = $div->getElementsByTagName('div');
+        foreach ($divsInternas as $divInterna) {
+            $classeInterna = $divInterna->getAttribute('class');
+            if ($classeInterna == 'library') {
+                $AsInternos = $divInterna->getElementsByTagName('a');
+                foreach ($AsInternos as $AsInterno) {
+                    $arrayA[] = $AsInterno->nodeValue;
+                }
+                break;
+            }
+        }
+        print_r($arrayA);
+        break;
+    }
+}
+    
