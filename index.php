@@ -1,73 +1,9 @@
 <?php
 
-$proxy = '10.1.21.254:3128';
+require './util/GutenbergCrawler.php';
 
-$arrayConfig = array(
-    'http' => array(
-        'proxy' => $proxy,
         'request_fulluri' => true
-    ),
-    'https' => array(
-        'proxy' => $proxy,
-        'request_fulluri' => true
-    )
-);
+$gut = new GutenbergCrawler();
+$paragraphs = $gut->getParagraphs();
 
-$context = stream_context_create($arrayConfig);
-//-><->-<-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><->
-
-$url = 'http://gutenberg.org/';
-$html = file_get_contents($url, false, $context);
-
-$dom = new DOMDocument();
-libxml_use_internal_errors(true);
-
-// Transforma o HTML em objeto
-$dom->loadHTML($html);
-libxml_clear_errors();
-
-// Captura das Tags </p>
-$tagsP = $dom->getElementsByTagName('div');
-$arrayP = [];
-
-foreach ($tagsP as $div) {
-    $class = $div->getAttribute('class');
-    if ($class == 'page_content') {
-        $divsInternas = $div->getElementsByTagName('div');
-        foreach ($divsInternas as $divInterna) {
-            $classeInterna = $divInterna->getAttribute('class');
-            if ($classeInterna == 'box_announce') {
-                $PsInternos = $divInterna->getElementsByTagName('p');
-                foreach ($PsInternos as $PsInterno) {
-                    $arrayP[] = $PsInterno->nodeValue;
-                }
-                break;
-            }
-        }
-        print_r($arrayP);
-        break;
-    }
-}
-
-$tagsA = $dom->getElementsByTagName('div');
-$arrayA = [];
-
-foreach ($tagsA as $div) {
-    $class = $div->getAttribute('class');
-    if ($class == 'page_content') {
-        $divsInternas = $div->getElementsByTagName('div');
-        foreach ($divsInternas as $divInterna) {
-            $classeInterna = $divInterna->getAttribute('class');
-            if ($classeInterna == 'library') {
-                $AsInternos = $divInterna->getElementsByTagName('a');
-                foreach ($AsInternos as $AsInterno) {
-                    $arrayA[] = $AsInterno->nodeValue;
-                }
-                break;
-            }
-        }
-        print_r($arrayA);
-        break;
-    }
-}
-    
+print_r($paragraphs);
