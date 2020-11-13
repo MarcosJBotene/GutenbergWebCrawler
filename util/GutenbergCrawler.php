@@ -25,6 +25,7 @@ class GutenbergCrawler
         return $arrayParagraphs;
     }
 
+    // Cria a configuração com o Proxy.
     private function getContextConnection()
     {
         $arrayConfig = array(
@@ -42,6 +43,7 @@ class GutenbergCrawler
         return $context;
     }
 
+    // Carrega o HTML
     private function loadHTML()
     {
         $context = $this->getContextConnection();
@@ -59,11 +61,11 @@ class GutenbergCrawler
         return $divTags;
     }
 
-    private function captureInternalDivsPageContent($divsGeral)
+    private function captureInternalDivsPageContent($allDivs)
     {
         $internalDivs = null;
 
-        foreach ($divsGeral as $div) {
+        foreach ($allDivs as $div) {
             $class = $div->getAttribute('class');
 
             if ($class == 'page_content') {

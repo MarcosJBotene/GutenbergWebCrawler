@@ -1,6 +1,6 @@
 <?php
 
-require './util/GutenbergCrawler.php';
+require '../WebCrawler/util/GutenbergCrawler.php';
 
 $gut = new GutenbergCrawler();
 $paragraphs = $gut->getParagraphs();
