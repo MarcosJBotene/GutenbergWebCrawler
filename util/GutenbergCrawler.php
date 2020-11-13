@@ -1,19 +1,22 @@
 <?php
 
-class GutenbergCrawler {
+class GutenbergCrawler
+{
 
     private $url;
     private $proxy;
     private $dom;
     private $html;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->url = "http://gutenberg.org";
         $this->proxy = "10.1.21.254:3128";
         $this->dom = new DOMDocument();
     }
 
-    public function getParagraphs() {
+    public function getParagraphs()
+    {
         $this->loadHTML();
         $divTags = $this->captureDivTags();
         $internalDiv = $this->captureInternalDivsPageContent($divTags);
@@ -22,7 +25,8 @@ class GutenbergCrawler {
         return $arrayParagraphs;
     }
 
-    private function getContextConnection() {
+    private function getContextConnection()
+    {
         $arrayConfig = array(
             'http' => array(
                 'proxy' => $this->proxy,
@@ -38,7 +42,8 @@ class GutenbergCrawler {
         return $context;
     }
 
-    private function loadHTML() {
+    private function loadHTML()
+    {
         $context = $this->getContextConnection();
         $this->html = file_get_contents($this->url, false, $context);
 
@@ -48,12 +53,14 @@ class GutenbergCrawler {
         libxml_clear_errors();
     }
 
-    private function captureDivTags() {
+    private function captureDivTags()
+    {
         $divTags = $this->dom->getElementsByTagName('div');
         return $divTags;
     }
 
-    private function captureInternalDivsPageContent($divsGeral) {
+    private function captureInternalDivsPageContent($divsGeral)
+    {
         $internalDivs = null;
 
         foreach ($divsGeral as $div) {
@@ -68,7 +75,8 @@ class GutenbergCrawler {
         return $internalDivs;
     }
 
-    private function capturePTags($internalDivs) {
+    private function capturePTags($internalDivs)
+    {
         $pTags = null;
 
         foreach ($internalDivs as $internalDiv) {
@@ -81,7 +89,8 @@ class GutenbergCrawler {
         return $pTags;
     }
 
-    private function getArrayParagraphs($pTags) {
+    private function getArrayParagraphs($pTags)
+    {
         $arrayParagraphs = [];
 
         foreach ($pTags as $p) {
@@ -90,5 +99,4 @@ class GutenbergCrawler {
 
         return $arrayParagraphs;
     }
-
 }
